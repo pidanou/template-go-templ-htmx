@@ -1,0 +1,77 @@
+package views
+
+import ()
+
+templ AuthenticatedLayout() {
+	<html>
+		<head>
+			<script src="/static/js/htmx.min.js"></script>
+			<link rel="stylesheet" href="/static/css/style.css"/>
+		</head>
+		<body class="w-screen h-screen flex flex-col">
+			<div>
+				@Header()
+			</div>
+			<div class="flex flex-row w-full h-[calc(100vh-3rem)]">
+				@Navbar()
+				<div class="overflow-auto w-full">
+					{ children... }
+				</div>
+			</div>
+		</body>
+	</html>
+}
+
+templ Header() {
+	<div class="flex flex-row items-center justify-between px-3 py-2 h-12">
+		<a href="/">test</a>
+	</div>
+}
+
+templ Navbar() {
+	<div class="w-fit space-y-4 justify-between flex-col flex h-full">
+		<div class="px-3 py-2">
+			<h2 class="mb-2 px-4 text-lg font-semibold tracking-tight">
+				Déneigement
+			</h2>
+			<div class="space-y-1 flex flex-col">
+				@ClientButton()
+			</div>
+		</div>
+		<div class="py-6 items-center flex flex-col">
+			<button class="btn">Déconnexion</button>
+		</div>
+	</div>
+}
+
+templ ClientButton() {
+	<script>
+  document.addEventListener("DOMContentLoaded", activateButton);
+
+  function activateButton() {
+    var path = window.location.pathname
+
+    if (path.startsWith("/clients")) {
+      console.log(path)
+      document.getElementById("clientButton").classList.remove('btn-ghost')
+
+    }
+  }
+</script>
+	<a id="clientButton" class="btn btn-ghost w-[200px] justify-start" href="/clients">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			class="mr-2 h-4 w-4"
+		>
+			<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+			<circle cx="12" cy="7" r="4"></circle>
+		</svg>
+		Clients
+	</a>
+}

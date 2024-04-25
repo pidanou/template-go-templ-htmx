@@ -1,0 +1,88 @@
+package views
+
+import (
+"github.com/sevendycom/poc-htmx-alpine/internal/models"
+"fmt"
+)
+
+templ Clients(clients []*models.Client) {
+@AuthenticatedLayout() {
+@ClientsTable(clients)
+}
+}
+
+templ ClientsTable(clients []*models.Client) {
+<table class="table">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    for _, client := range clients {
+    @ClientsTableRow(client)
+    }
+  </tbody>
+</table>
+}
+
+templ ClientsTableRow(client *models.Client) {
+<tr id={ fmt.Sprintf("id-%s", client.Id.String()) }>
+  <td>{ client.Id.String() } </td>
+  <td>{ client.LastName } </td>
+  <td>
+    <a class="btn" href={ templ.URL(fmt.Sprintf("/clients/%s", client.Id.String())) }>
+      go
+    </a>
+  </td>
+  <td>
+    <button class="btn" hx-swap="outerHTML" hx-target={ fmt.Sprintf("#id-%s", client.Id.String()) } hx-get={
+      fmt.Sprintf("/clients/edit/%s", client.Id.String()) } hx-target={ fmt.Sprintf("#id-%s", client.Id.String()) }>
+      edit
+    </button>
+  </td>
+</tr>
+}
+
+templ ClientsTableEditRow(client *models.Client) {
+<tr id={ fmt.Sprintf("id-%s", client.Id.String()) }>
+  <td>
+    <input type="text" class="input input-sm input-bordered w-full" value={ client.Id.String() } />
+  </td>
+  <td>
+    <input type="text" class="input input-sm input-bordered w-full" value={ client.LastName } />
+  </td>
+  <td>
+    <a class="btn" href={ templ.URL(fmt.Sprintf("/clients/%s", client.Id.String())) }>
+      go
+    </a>
+  </td>
+  <td>
+    <button class="btn" hx-swap="outerHTML" hx-target={ fmt.Sprintf("#id-%s", client.Id.String()) } hx-get={
+      fmt.Sprintf("/clients/%s", client.Id.String()) } hx-target={ fmt.Sprintf("#id-%s", client.Id.String()) }>
+      cancel
+    </button>
+  </td>
+</tr>
+}
+
+templ ClientDetail(client *models.Client) {
+@AuthenticatedLayout() {
+<table class="table">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @ClientsTableRow(client)
+  </tbody>
+</table>
+}
+}
